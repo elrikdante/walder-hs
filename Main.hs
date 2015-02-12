@@ -67,6 +67,41 @@ tuple of type (a, State), when interacting with this function however -
 we address it using the name M Int.
 -}
 
+{-5
+:On Monads:
+a- > M b
+A function that takes some value of type a and reutns a result
+of type b with a possible additional effect captured by M
+
+^ best definiton of a monad I've ever seen.
+
+A monad is a triple (M, unit, *) consisting of a type constructor M and two
+operations of the given polymorphic types.
+
+m*\a.n
+
+| m and n are expressions, and a is a variable.
+
+m :: M a
+* :: (M a -> f)
+\a.n :: a -> Mb with n bound to a
+
+analgous to
+let a = m in b
+
+this allows us to perform computation m before computation b and sequence their
+result into a.
+
+
+mEval           :: Term -> Mc Int
+mEval (Con a)   = unit a
+mEval (Div t u) = eval t*\a.eval u*\b.unit(a `div` b)
+
+-}
+
+unit :: a -> M a
+(*) :: M a -> (a -> M b) -> M b
+
 type State     = Int
 -- We will use this to count the number of
 -- Div operations performed.
