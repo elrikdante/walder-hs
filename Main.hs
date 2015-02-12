@@ -53,6 +53,20 @@ computation was initialised with.
 -}
 
 type M a       = State -> (a, State)
+{-4
+>:i M Int
+type M a = State -> (a, State)
+
+so as i see here, a type of M Int, is a function
+that takes a value of type State and returns a pair.
+
+More specifically, I think I've uncovered the reasoning.
+
+M a is a synonym for a function that takes a State and returns a
+tuple of type (a, State), when interacting with this function however -
+we address it using the name M Int.
+-}
+
 type State     = Int
 -- We will use this to count the number of
 -- Div operations performed.
