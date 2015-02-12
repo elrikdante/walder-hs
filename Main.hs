@@ -26,7 +26,7 @@ computation that *returned* some value of type a.
 
 Eg: M Int
 -}
-data M a       = Raise Exception | Return a
+data Mc a       = Raise Exception | Return a
 
 {-3
 State
@@ -57,13 +57,11 @@ type State     = Int
 -- We will use this to count the number of
 -- Div operations performed.
 
-
-
-runM            :: Show a => M a -> a
+runM            :: Show a => Mc a -> a
 runM (Return a) = a
 runM (Raise  a) = Prelude.error $ "Error" ++ a
 
-eval           :: Term -> M Int
+eval           :: Term -> Mc Int
 eval (Con a)   = Return a
 eval (Div t u) =
   case eval u of
@@ -73,6 +71,12 @@ eval (Div t u) =
      _     -> case eval t of
        Raise  e -> Raise e
        Return b -> Return (b `div` a)
+
+eval'             :: Term -> M Int
+eval' (Con a)   x =  (a,x)
+eval' (Div t u) x =  let (a,y) = eval' t x in
+                     let (b,z) = eval' u y in
+                     (a `div` b , z + 1)
 
 
 answer,error :: Term
